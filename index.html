@@ -55,18 +55,27 @@
             debugDiv.innerHTML += `<div class="${messageClass}">[${timestamp}] ${message}</div>`;
         }
 
-        // Function to get URL parameters
+        // Function to get URL parameters from both search and hash
         function getUrlParams() {
+            const result = {};
             try {
-                const params = new URLSearchParams(window.location.search);
-                const result = {};
-                for (const [key, value] of params.entries()) {
+                // Parse query string
+                const searchParams = new URLSearchParams(window.location.search);
+                for (const [key, value] of searchParams.entries()) {
                     result[key] = value;
+                }
+                // Parse hash fragment (if present)
+                if (window.location.hash && window.location.hash.length > 1) {
+                    const hash = window.location.hash.substring(1); // remove '#'
+                    const hashParams = new URLSearchParams(hash);
+                    for (const [key, value] of hashParams.entries()) {
+                        result[key] = value;
+                    }
                 }
                 return result;
             } catch (error) {
                 updateDebugInfo(`Error parsing URL parameters: ${error.message}`, true);
-                return {};
+                return result;
             }
         }
 
@@ -104,9 +113,11 @@
         window.onload = function() {
             updateDebugInfo('Page loaded');
             updateDebugInfo('Current URL: ' + window.location.href);
+            updateDebugInfo('window.location.search: ' + window.location.search);
+            updateDebugInfo('window.location.hash: ' + window.location.hash);
             const params = getUrlParams();
             updateDebugInfo('Initial URL Parameters: ' + JSON.stringify(params, null, 2));
         };
     </script>
 </body>
-</html>
+</html> 
