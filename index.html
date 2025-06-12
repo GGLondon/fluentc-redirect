@@ -56,30 +56,28 @@
         }
 
         // Function to get URL parameters from both search and hash
-function getUrlParams() {
-    const result = {};
-    try {
-        // Parse query string
-        const searchParams = new URLSearchParams(window.location.search);
-        for (const [key, value] of searchParams.entries()) {
-            result[key] = value;
-        }
-        // Parse hash fragment (if present)
-        if (window.location.hash && window.location.hash.length > 1) {
-            updateDebugInfo('Raw hash: ' + window.location.hash);
-            const hash = window.location.hash.substring(1); // remove '#'
-            updateDebugInfo('Hash string for parsing: ' + hash);
-            const hashParams = new URLSearchParams(hash);
-            for (const [key, value] of hashParams.entries()) {
-                result[key] = value;
+        function getUrlParams() {
+            const result = {};
+            try {
+                // Parse query string
+                const searchParams = new URLSearchParams(window.location.search);
+                for (const [key, value] of searchParams.entries()) {
+                    result[key] = value;
+                }
+                // Parse hash fragment (if present)
+                if (window.location.hash && window.location.hash.length > 1) {
+                    const hash = window.location.hash.substring(1); // remove '#'
+                    const hashParams = new URLSearchParams(hash);
+                    for (const [key, value] of hashParams.entries()) {
+                        result[key] = value;
+                    }
+                }
+                return result;
+            } catch (error) {
+                updateDebugInfo(`Error parsing URL parameters: ${error.message}`, true);
+                return result;
             }
         }
-        return result;
-    } catch (error) {
-        updateDebugInfo(`Error parsing URL parameters: ${error.message}`, true);
-        return result;
-    }
-}
 
         // Function to handle the redirect
         function handleRedirect() {
