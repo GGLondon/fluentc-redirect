@@ -62,14 +62,14 @@
                 // Parse query string
                 const searchParams = new URLSearchParams(window.location.search);
                 for (const [key, value] of searchParams.entries()) {
-                    result[key] = value;
+                    result[key] = decodeURIComponent(value);
                 }
                 // Parse hash fragment (if present)
                 if (window.location.hash && window.location.hash.length > 1) {
                     const hash = window.location.hash.substring(1); // remove '#'
                     const hashParams = new URLSearchParams(hash);
                     for (const [key, value] of hashParams.entries()) {
-                        result[key] = value;
+                        result[key] = decodeURIComponent(value);
                     }
                 }
                 return result;
@@ -92,7 +92,7 @@
                 }
 
                 // Construct the deep link URL
-                const deepLink = `fluentc://reset-password?type=recovery&access_token=${params.access_token}`;
+                const deepLink = `fluentc://reset-password?type=recovery&access_token=${encodeURIComponent(params.access_token)}`;
                 updateDebugInfo('Attempting to open: ' + deepLink);
 
                 // Try to open the app
@@ -117,6 +117,12 @@
             updateDebugInfo('window.location.hash: ' + window.location.hash);
             const params = getUrlParams();
             updateDebugInfo('Initial URL Parameters: ' + JSON.stringify(params, null, 2));
+            
+            // Auto-trigger redirect if we have the token
+            if (params.access_token) {
+                updateDebugInfo('Auto-triggering redirect...');
+                handleRedirect();
+            }
         };
     </script>
 </body>
