@@ -86,13 +86,13 @@
                 updateDebugInfo('URL Parameters: ' + JSON.stringify(params, null, 2));
 
                 // Check if we have the required parameters
-                if (!params.type || !params.access_token) {
-                    updateDebugInfo('Missing required parameters (type or access_token)', true);
+                if (!params.access_token) {
+                    updateDebugInfo('Missing required parameter (access_token)', true);
                     return;
                 }
 
                 // Construct the deep link URL
-                const deepLink = `fluentc://reset-password?type=${params.type}&access_token=${params.access_token}`;
+                const deepLink = `fluentc://reset-password?type=recovery&access_token=${params.access_token}`;
                 updateDebugInfo('Attempting to open: ' + deepLink);
 
                 // Try to open the app
